@@ -80,3 +80,12 @@ test('Проверко кнопки GetStart', async ({ page }) => {
     .soft(page.getByRole('link', { name: 'Get started' }))
     .toHaveAttribute('href', '/docs/intro');
 });
+
+test('Проверко кнопки GetStart2', async ({ page }) => {
+  await page.goto('https://playwright.dev/');
+  await expect.soft(page.getByRole('link', { name: 'Get started' })).toBeVisible();
+  await expect.soft(page.getByRole('banner')).toContainText('Get started');
+  await expect
+    .soft(page.getByRole('link', { name: 'Get started' }))
+    .toHaveAttribute('href', '/docs/intro');
+});
