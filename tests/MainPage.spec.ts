@@ -1,21 +1,58 @@
 import { test, expect } from '@playwright/test';
 
+const elements = [
+  {
+    locator: (page) => page.getByRole('link', { name: 'Playwright logo Playwright' }),
+    name: 'Playwright logo link',
+    text: 'Playwright',
+  },
+  {
+    locator: (page) => page.getByRole('link', { name: 'Docs' }),
+    name: 'Docs link',
+    text: 'Docs',
+  },
+  {
+    locator: (page) => page.getByRole('link', { name: 'MCP', exact: true }),
+    name: 'MCP link',
+    text: 'MCP',
+  },
+  {
+    locator: (page) => page.getByRole('link', { name: 'CLI', exact: true }),
+    name: 'CLI link',
+    text: 'CLI',
+  },
+  {
+    locator: (page) => page.getByRole('link', { name: 'API' }),
+    name: 'API link',
+    text: 'API',
+  },
+  {
+    locator: (page) => page.getByLabel('GitHub repository'),
+    name: 'GitHub repository link',
+  },
+  {
+    locator: (page) => page.getByLabel('Discord server'),
+    name: 'Discord icon',
+  },
+  {
+    locator: (page) => page.getByLabel('Switch between dark and light'),
+    name: 'lightmod icon',
+  },
+  {
+    locator: (page) => page.getByLabel('Search (Control+k'),
+    name: 'Search input',
+  },
+];
 test.describe('Тесты главной страницы', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://playwright.dev/');
   });
-  test('Проверко отображения элементов навигации - Хедер', async ({ page }) => {
-    await expect.soft(page.getByRole('link', { name: 'Playwright logo Playwright' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Docs' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'MCP', exact: true })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'CLI', exact: true })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'API' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'GitHub repository' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Discord server' })).toBeVisible();
-    await expect
-      .soft(page.getByRole('button', { name: 'Switch between dark and light' }))
-      .toBeVisible();
-    await expect.soft(page.getByRole('button', { name: 'Search (Control+k)' })).toBeVisible();
+  test('Проверка отображения элементов навигации - Хедер', async ({ page }) => {
+    for (const { locator, name } of elements) {
+      await test.step(`Проверка отображения элемента: ${name}`, async () => {
+        await expect.soft(locator(page)).toBeVisible();
+      });
+    }
   });
   test('Проверко названия элементов навигации - Хедер', async ({ page }) => {
     await expect(page.getByRole('link', { name: 'Playwright logo Playwright' })).toContainText(
