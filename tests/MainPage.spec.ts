@@ -5,34 +5,62 @@ const elements = [
     locator: (page) => page.getByRole('link', { name: 'Playwright logo Playwright' }),
     name: 'Playwright logo link',
     text: 'Playwright',
+    attribute: {
+      type: 'href',
+      value: '/',
+    },
   },
   {
     locator: (page) => page.getByRole('link', { name: 'Docs' }),
     name: 'Docs link',
     text: 'Docs',
+    attribute: {
+      type: 'href',
+      value: '/docs/intro',
+    },
   },
   {
     locator: (page) => page.getByRole('link', { name: 'MCP', exact: true }),
     name: 'MCP link',
     text: 'MCP',
+    attribute: {
+      type: 'href',
+      value: '/mcp/introduction',
+    },
   },
   {
     locator: (page) => page.getByRole('link', { name: 'CLI', exact: true }),
     name: 'CLI link',
     text: 'CLI',
+    attribute: {
+      type: 'href',
+      value: '/agent-cli/introduction',
+    },
   },
   {
     locator: (page) => page.getByRole('link', { name: 'API' }),
     name: 'API link',
     text: 'API',
+    attribute: {
+      type: 'href',
+      value: '/docs/api/class-playwright',
+    },
   },
   {
     locator: (page) => page.getByLabel('GitHub repository'),
     name: 'GitHub repository link',
+    attribute: {
+      type: 'href',
+      value: 'https://github.com/microsoft/playwright',
+    },
   },
   {
     locator: (page) => page.getByLabel('Discord server'),
     name: 'Discord icon',
+    attribute: {
+      type: 'href',
+      value: 'https://aka.ms/playwright/discord',
+    },
   },
   {
     locator: (page) => page.getByLabel('Switch between dark and light'),
@@ -54,39 +82,25 @@ test.describe('Тесты главной страницы', () => {
       });
     }
   });
-  test('Проверко названия элементов навигации - Хедер', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'Playwright logo Playwright' })).toContainText(
-      'Playwright',
-    );
-    await expect(page.getByRole('link', { name: 'Docs' })).toContainText('Docs');
-    await expect(page.getByRole('link', { name: 'MCP', exact: true })).toContainText('MCP');
-    await expect(page.getByRole('link', { name: 'CLI', exact: true })).toContainText('CLI');
-    await expect(page.getByRole('link', { name: 'API' })).toContainText('API');
-    await page.getByRole('button', { name: 'Node.js' }).click();
+
+  test('Проверка названия элементов навигации - Хедер', async ({ page }) => {
+    for (const { locator, name, text } of elements) {
+      if (text) {
+        test.step(`Проверка названия элемента: ${name}`, async () => {
+          await expect(locator(page)).toContainText(text);
+        });
+      }
+    }
   });
 
   test('Проверко атрибутов href элементов навигации - Хедер', async ({ page }) => {
-    await expect
-      .soft(page.getByRole('link', { name: 'Playwright logo Playwright' }))
-      .toHaveAttribute('href', '/');
-    await expect
-      .soft(page.getByRole('link', { name: 'Docs' }))
-      .toHaveAttribute('href', '/docs/intro');
-    await expect
-      .soft(page.getByRole('link', { name: 'MCP', exact: true }))
-      .toHaveAttribute('href', '/mcp/introduction');
-    await expect
-      .soft(page.getByRole('link', { name: 'CLI', exact: true }))
-      .toHaveAttribute('href', '/agent-cli/introduction');
-    await expect
-      .soft(page.getByRole('link', { name: 'API' }))
-      .toHaveAttribute('href', '/docs/api/class-playwright');
-    await expect
-      .soft(page.getByRole('link', { name: 'GitHub repository' }))
-      .toHaveAttribute('href', 'https://github.com/microsoft/playwright');
-    await expect
-      .soft(page.getByRole('link', { name: 'Discord server' }))
-      .toHaveAttribute('href', 'https://aka.ms/playwright/discord');
+    for (const { locator, name, attribute } of elements) {
+      if (attribute) {
+        test.step(`Проверка атрибута href элемента: ${name}`, async () => {
+          await expect(locator(page)).toHaveAttribute(attribute?.type, attribute.value);
+        });
+      }
+    }
   });
 
   test('Проверко переключения лайт мод', async ({ page }) => {
