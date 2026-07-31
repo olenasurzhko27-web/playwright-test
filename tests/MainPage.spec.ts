@@ -1,8 +1,19 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page, Locator } from '@playwright/test';
 
-const elements = [
+interface Element {
+  locator: (page: Page) => Locator;
+  name: string;
+  text?: string;
+  attribute?: {
+    type: string;
+    value: string;
+  };
+}
+
+const elements: Element[] = [
   {
-    locator: (page) => page.getByRole('link', { name: 'Playwright logo Playwright' }),
+    locator: (page: Page): Locator =>
+      page.getByRole('link', { name: 'Playwright logo Playwright' }),
     name: 'Playwright logo link',
     text: 'Playwright',
     attribute: {
@@ -11,7 +22,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByRole('link', { name: 'Docs' }),
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'Docs' }),
     name: 'Docs link',
     text: 'Docs',
     attribute: {
@@ -20,7 +31,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByRole('link', { name: 'MCP', exact: true }),
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'MCP', exact: true }),
     name: 'MCP link',
     text: 'MCP',
     attribute: {
@@ -29,7 +40,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByRole('link', { name: 'CLI', exact: true }),
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'CLI', exact: true }),
     name: 'CLI link',
     text: 'CLI',
     attribute: {
@@ -38,7 +49,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByRole('link', { name: 'API' }),
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'API' }),
     name: 'API link',
     text: 'API',
     attribute: {
@@ -47,7 +58,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByLabel('GitHub repository'),
+    locator: (page: Page): Locator => page.getByLabel('GitHub repository'),
     name: 'GitHub repository link',
     attribute: {
       type: 'href',
@@ -55,7 +66,7 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByLabel('Discord server'),
+    locator: (page: Page): Locator => page.getByLabel('Discord server'),
     name: 'Discord icon',
     attribute: {
       type: 'href',
@@ -63,11 +74,11 @@ const elements = [
     },
   },
   {
-    locator: (page) => page.getByLabel('Switch between dark and light'),
+    locator: (page: Page): Locator => page.getByLabel('Switch between dark and light'),
     name: 'lightmod icon',
   },
   {
-    locator: (page) => page.getByLabel('Search (Control+k'),
+    locator: (page: Page): Locator => page.getByLabel('Search (Control+k'),
     name: 'Search input',
   },
 ];
